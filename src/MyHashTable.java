@@ -8,7 +8,8 @@ public class MyHashTable <K, V> {
 	static final int LINEAR_STEP = 547;
 	List<MyEntry<K, V>> data;
 	int capacity, numEnts, maxProbe;
-	int[] probeHGram;	
+	int[] probeHGram;
+	
 	
 	public MyHashTable(final int c) {
 		capacity = c;
