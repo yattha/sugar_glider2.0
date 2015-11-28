@@ -1,3 +1,4 @@
+//Derek Moore, Heather Pedersen
 public class MyEntry<K, V> {
 	K key;
 	V value;

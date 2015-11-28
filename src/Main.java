@@ -1,3 +1,4 @@
+//Derek Moore, Heather Pedersen
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -5,113 +6,123 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Map.Entry;
-import java.util.Scanner;
-import static java.lang.System.out;
-import static java.nio.file.Files.readAllBytes;
-import static java.nio.file.Paths.get;
 
 
 public class Main {
-	static final String DEFAULT_TXT = "./src/WarAndPeace.txt";
-	//static StringBuilder text;
-	static CodingTree huffTree;
+	static final String DEFAULT_TXT = "./src/WarAndPeace.txt", PRIDE_TXT = "./src/PridePrej.txt", XMAS_TXT = "./src/Christmas.txt";	
+	static CodingTree defaultTree, prideTree, xmasTree;
 	
 	public static void main(String[] args) {
 		//testHashTable();
-		readDefaultText();
-		huffTree.frequencies.stats();
-		//System.out.println(huffTree.codes);
-		
+		readTexts();
+		System.out.println("\n\nDefault(WarAndPeace.txt) stats...");
+		defaultTree.codes.stats();
 		outputCodes();
-		outputCompressed();
-		//System.out.println(huffTree.codes.size());
+		outputCompressed();	
 		outputDecompressed();
+		
+		//COMMENT OUT NEXT LINE TO DECOMPRESS FROM FILE (specifically works for DEFAULT_TXT, change path or use default files names in project folder
 		//decompressonFromFile();
-//		for(Entry<String, Integer>m : huffTree.frequencies.entrySet()) {
-//			System.out.println(m.getValue() + " : " + (int)m.getKey().charAt(0));
-//		}
-		//System.out.println(huffTree.frequencies);
 	}
 
-	private static void outputDecompressed() {
-		
-		
-		
+	private static void outputDecompressed() {		
 		try {
-			FileWriter out = new FileWriter("./decompressed.txt");
-			String decompressed = CodingTree.decode(huffTree.bitString, huffTree.codes);
-			//System.out.println(decompressed);
-			
+			FileWriter out = new FileWriter("./DefaultDecompressed.txt");
+			String decompressed = CodingTree.decode(defaultTree.bitString, defaultTree.codes);			
 			out.write(decompressed);
 			out.flush();
 			out.close();
+			System.out.println("Output decompressed file: DefaultDecomressed.txt");
+			
+			
+			
+			FileWriter out1 = new FileWriter("./PrideDecompressed.txt");
+			decompressed = CodingTree.decode(prideTree.bitString, prideTree.codes);			
+			out1.write(decompressed);
+			out1.flush();
+			out1.close();
+			System.out.println("Output decompressed file: PrideDecomressed.txt");
+			
+			
+			
+			FileWriter out2 = new FileWriter("./XMASDecompressed.txt");
+			decompressed = CodingTree.decode(xmasTree.bitString, xmasTree.codes);			
+			out2.write(decompressed);
+			out2.flush();
+			out2.close();
+			System.out.println("Output decompressed file: XMASDecomressed.txt");
 		} catch (FileNotFoundException e) {			
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (IOException e) {			
 			e.printStackTrace();
-		}
-		
+		}		
 	}
 
-	private static void outputCompressed() {
-		
+	private static void outputCompressed() {		
 		try {
-			FileOutputStream fos = new FileOutputStream("./compressed.txt");
-			//System.out.println(huffTree.bits.length);
-			fos.write(huffTree.bits);
+			FileOutputStream fos = new FileOutputStream("./DefaultCompressed.txt");			
+			fos.write(defaultTree.bits);
 			fos.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Output compressed file: DefaultComressed.txt");
+			
+			
+			fos = new FileOutputStream("./PrideCompressed.txt");			
+			fos.write(prideTree.bits);
+			fos.close();
+			System.out.println("Output compressed file: DefaultComressed.txt");
+			
+			
+			
+			fos = new FileOutputStream("./XMASCompressed.txt");			
+			fos.write(xmasTree.bits);
+			fos.close();
+			System.out.println("Output compressed file: XMASComressed.txt\n");
+		} catch (IOException e) {			
 			e.printStackTrace();
-		}
-		
+		}		
 	}
 
-	private static void readDefaultText() {
-		
-		try {
-			huffTree = new CodingTree(new String(readAllBytes(get(DEFAULT_TXT))));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-//		try {
-//			String inText = new Scanner(new File(DEFAULT_TXT)).useDelimiter("\\A").next();
-//					
-//			huffTree = new CodingTree(inText);		
-//		
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+	private static void readTexts() {
+		long start = System.currentTimeMillis();
+		defaultTree = new CodingTree(readFile(DEFAULT_TXT, Charset.defaultCharset()));
+		System.out.println("Uncompressed file size: " + defaultTree.text.length() + " bytes");
+		System.out.println("Compressed file size: " + defaultTree.bitString.length()/8 +" bytes");
+		System.out.println("Compression ratio: " + (int)((defaultTree.bitString.length()/8)/(double)defaultTree.text.length()*100) +"%");
+		System.out.println("Running Time: "+ (System.currentTimeMillis()-start) + "ms\n");
+		start = System.currentTimeMillis();
+		prideTree = new CodingTree(readFile(PRIDE_TXT, Charset.defaultCharset()));
+		System.out.println("Uncompressed file size: " + prideTree.text.length() + " bytes");
+		System.out.println("Compressed file size: " + prideTree.bitString.length()/8 +" bytes");
+		System.out.println("Compression ratio: " + (int)((prideTree.bitString.length()/8)/(double)prideTree.text.length()*100) +"%");
+		System.out.println("Running Time: "+ (System.currentTimeMillis()-start) + "ms\n");
+		start = System.currentTimeMillis();
+		xmasTree = new CodingTree(readFile(XMAS_TXT, Charset.defaultCharset()));
+		System.out.println("Uncompressed file size: " + xmasTree.text.length() + " bytes");
+		System.out.println("Compressed file size: " + xmasTree.bitString.length()/8 +" bytes");
+		System.out.println("Compression ratio: " + (int)((xmasTree.bitString.length()/8)/(double)xmasTree.text.length()*100) +"%");
+		System.out.println("Running Time: "+ (System.currentTimeMillis()-start) + "ms");
+		start = System.currentTimeMillis();
 		}
 			
 
+	@SuppressWarnings("unused")
 	private static void testHashTable() {
-		MyHashTable<String, String> test = new MyHashTable<String, String>(6);
-		//System.out.println(test);
+		MyHashTable<String, String> test = new MyHashTable<String, String>(6);		
 		test.put("0", "a");System.out.println(test);
-		test.put("1", "b");System.out.println(test);
-		
+		test.put("1", "b");System.out.println(test);		
 		test.put("2", "c");System.out.println(test);test.put("2", "d");System.out.println(test);
 		test.stats();
 		System.out.println(test.get("2"));
 		System.out.println(test.get("1"));
-		System.out.println(test.get("8"));
-		
-		
-		
+		System.out.println(test.get("8"));		
 	}
 	
 	
 	static String readFile(String path, Charset encoding) {			  
+		
 		String result = "";	
 		try {
 			byte[] encoded = Files.readAllBytes(Paths.get(path));
@@ -119,6 +130,7 @@ public class Main {
 		} catch (IOException e) {				
 			e.printStackTrace();
 		}
+		System.out.println(path+" read finshed...");
 		return result;
 	}
 	
@@ -126,14 +138,29 @@ public class Main {
 		
 		try {
 			FileWriter out = new FileWriter("./codes.txt");
-			String codeString = huffTree.codes.toString();
+			String codeString = defaultTree.codes.toString();
 			out.write(codeString);
 			out.flush();
+			System.out.println("Output default code file: codes.txt");
+			out.close();
+			
+			out = new FileWriter("./PrideCodes.txt");
+			codeString = prideTree.codes.toString();
+			out.write(codeString);
+			out.flush();
+			System.out.println("Output Pride code file: PrideCodes.txt");
+			out.close();
+			
+			out = new FileWriter("./XMASCodes.txt");
+			codeString = xmasTree.codes.toString();
+			out.write(codeString);
+			out.flush();
+			System.out.println("Output XMAS code file: XMASCodes.txt\n");
+			
 			out.close();
 		} catch (FileNotFoundException e) {			
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (IOException e) {			
 			e.printStackTrace();
 		}
 		
@@ -162,10 +189,7 @@ public class Main {
 			e1.printStackTrace();
 			}
 		System.out.println(inBits.length());
-		System.out.println(huffTree.bitString.length());
-		
-		
-		
+		System.out.println(defaultTree.bitString.length());		
 		
 		File codeFile = new File("./codes.txt");
 		StringBuilder codesSB = new StringBuilder();

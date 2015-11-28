@@ -1,3 +1,4 @@
+//Derek Moore, Heather Pedersen
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,14 +19,12 @@ public class MyHashTable <K, V> {
 		numEnts = 0;
 		probeHGram = new int[capacity];
 		Arrays.fill(probeHGram, 0);
-		maxProbe = 0;
-		
+		maxProbe = 0;		
 	}
 	
 	
 
-	public void put(K searchKey, V newValue) {
-		//if(!contains(searchKey))numEnts++;//INSANE
+	public void put(K searchKey, V newValue) {		
 		int index = hash(searchKey);
 		MyEntry<K, V> temp = new MyEntry<K, V>(searchKey, newValue);
 		while(Objects.nonNull(data.get(index)) && !searchKey.equals(data.get(index).key)) {
@@ -38,11 +37,8 @@ public class MyHashTable <K, V> {
 			numEnts++;
 			probeHGram[temp.probeCount]++;			
 		}
-		data.set(index, temp);
-		
-		maxProbe = Math.max(temp.probeCount, maxProbe);
-		
-		
+		data.set(index, temp);		
+		maxProbe = Math.max(temp.probeCount, maxProbe);		
 	}
 	
 	V get(K searchKey) {		
@@ -51,14 +47,10 @@ public class MyHashTable <K, V> {
 		while(result != null && result.probed && !searchKey.equals(result.key)) {
 			index+=LINEAR_STEP;			
 			index%=capacity;
-			result = data.get(index);
-			
-		}
-		//if(!searchKey.equals(result.key)) result = null;	
-		
+			result = data.get(index);			
+		}		
 		V returnVal = null;
-		if(Objects.nonNull(result)) returnVal = result.value;
-		
+		if(Objects.nonNull(result)) returnVal = result.value;		
 		return returnVal;
 	}
 	
@@ -73,18 +65,7 @@ public class MyHashTable <K, V> {
 			
 		}
 		if(checkedEntry != null && searchKey.equals(checkedEntry.key))result = true;
-		return result;
-		
-//		int index = hash(searchKey);
-//		K checkedKey = null;
-//		if(data.get(index)!= null) checkedKey = data.get(index).key;		
-//		while(Objects.nonNull(checkedKey) && data.get(index).probed && !searchKey.equals(checkedKey)) {
-//			index+=LINEAR_STEP;			
-//			index%=capacity;
-//			checkedKey = data.get(index).key;
-//		}
-		//return searchKey.equals(checkedKey);
-		
+		return result;		
 	}
 	
 	public void stats() {
@@ -110,8 +91,6 @@ public class MyHashTable <K, V> {
 		return result/(double)numEnts;
 	}
 
-
-
 	 String histogramToString() {
 		StringBuilder result = new StringBuilder();
 		result.append('[');
@@ -119,12 +98,9 @@ public class MyHashTable <K, V> {
 		if(maxProbe > 0) result.delete(result.length()-2, result.length()).append(']');
 		else result.append(']');
 		return result.toString();
-	}
+	}	
 
-	
-
-	int hash(K searchKey) {		
-			
+	int hash(K searchKey) {					
 		return (((String)searchKey).hashCode()&0x7FFF)%capacity;
 	}
 	
@@ -132,8 +108,7 @@ public class MyHashTable <K, V> {
 		StringBuilder result = new StringBuilder();		
 		result.append('[');
 		for(int i = 0; i < capacity; i++){
-			if(data.get(i) != null){
-				
+			if(data.get(i) != null){				
 				result.append("(" + data.get(i).key + ", " + data.get(i).value + "), ");
 			}
 		}
@@ -148,7 +123,5 @@ public class MyHashTable <K, V> {
 		int result=0;
 		for(int i = 0; i<data.size(); i++)if(data.get(i) !=null)result++;	
 		return result;
-	}
-	
-	
+	}	
 }
