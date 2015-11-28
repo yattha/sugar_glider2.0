@@ -50,7 +50,7 @@ public class MyHashTable <K, V> {
 			result = data.get(index);			
 		}		
 		V returnVal = null;
-		if(Objects.nonNull(result)) returnVal = result.value;		
+		if(Objects.nonNull(result) && searchKey.equals(result.key)) returnVal = result.value;		
 		return returnVal;
 	}
 	
@@ -74,7 +74,7 @@ public class MyHashTable <K, V> {
 		result.append(numEnts + "\nNumber of Buckets: " + capacity +"\nHistogram of Probes: ");
 		result.append(histogramToString() + "\nFill Percentage: " + (numEnts/(double)capacity)*100 + "%");
 		result.append("\nMax Probe: " + maxProbe + "\nAverage Linear Prob: " + calcAvgProbe() );
-		System.out.println(result.toString()+"\n\n\n" );
+		System.out.println(result.toString()+"\n\n\n");
 	}
 
 	public ArrayList<MyEntry<K, V>> toList() {
@@ -101,7 +101,7 @@ public class MyHashTable <K, V> {
 	}	
 
 	int hash(K searchKey) {					
-		return (((String)searchKey).hashCode()&0x7FFF)%capacity;
+		return ((searchKey).hashCode()&0x7FFF)%capacity;
 	}
 	
 	public String toString() {

@@ -69,13 +69,13 @@ public class Main {
 			FileOutputStream fos = new FileOutputStream("./DefaultCompressed.txt");			
 			fos.write(defaultTree.bits);
 			fos.close();
-			System.out.println("Output compressed file: DefaultComressed.txt");
+			System.out.println("Output compressed file: DefaultCompressed.txt");
 			
 			
 			fos = new FileOutputStream("./PrideCompressed.txt");			
 			fos.write(prideTree.bits);
 			fos.close();
-			System.out.println("Output compressed file: DefaultComressed.txt");
+			System.out.println("Output compressed file: PrideComressed.txt");
 			
 			
 			
@@ -113,14 +113,19 @@ public class Main {
 
 	@SuppressWarnings("unused")
 	private static void testHashTable() {
-		MyHashTable<String, String> test = new MyHashTable<String, String>(6);		
-		test.put("0", "a");System.out.println(test);
-		test.put("1", "b");System.out.println(test);		
-		test.put("2", "c");System.out.println(test);test.put("2", "d");System.out.println(test);
+		MyHashTable<Integer, String> test = new MyHashTable<Integer, String>(7);		
+		test.put(1, "a");System.out.println(test);
+		test.put(0, "b");System.out.println(test);		
+		test.put(2, "c");System.out.println(test);
+		test.put(2, "d");System.out.println(test);
+		test.put(12, "d");System.out.println(test);
 		test.stats();
-		System.out.println(test.get("2"));
-		System.out.println(test.get("1"));
-		System.out.println(test.get("8"));		
+		System.out.println(test.get(1));
+		System.out.println(test.get(2));
+		System.out.println(test.get(8));
+		System.out.println(test.contains(2));
+		System.out.println(test.contains(3));
+		System.out.println(test.contains(4));
 	}
 	
 	
@@ -173,7 +178,7 @@ public class Main {
 	static void decompressonFromFile() {
 		MyHashTable<String, String> inCodes = new MyHashTable<String, String>(CodingTree.MAP_SIZE);
 		StringBuilder inBits = new StringBuilder(), tempByte = new StringBuilder();		
-		File textFile = new File("./compressed.txt");		
+		File textFile = new File("./DefaultCompressed.txt");		
 		try {
 			//long start = System.currentTimeMillis();
 			FileInputStream stream = new FileInputStream(textFile);
@@ -190,9 +195,7 @@ public class Main {
 			stream.close();				
 		} catch (IOException | NullPointerException e1) {
 			e1.printStackTrace();
-			}
-		System.out.println(inBits.length());
-		System.out.println(defaultTree.bitString.length());		
+			}		
 		
 		File codeFile = new File("./codes.txt");
 		StringBuilder codesSB = new StringBuilder();
@@ -216,10 +219,9 @@ public class Main {
 			}	
 		} catch (IOException | NullPointerException e1) {}	
 		
-		PrintStream outputFile;		
-		System.out.println(inCodes.get("message"));
+		PrintStream outputFile;				
 		try {			
-			outputFile = new PrintStream(new File("./decompressed.txt"));
+			outputFile = new PrintStream(new File("./decompressedFromFile.txt"));
 			outputFile.append(CodingTree.decode(inBits.toString(), inCodes));
 			outputFile.close();			
 		} catch (FileNotFoundException e1) {}
