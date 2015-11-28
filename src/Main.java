@@ -18,8 +18,11 @@ public class Main {
 	public static void main(String[] args) {
 		//testHashTable();
 		readTexts();
-		System.out.println("\n\nDefault(WarAndPeace.txt) stats...");
+		System.out.println("\n\nDefault(WarAndPeace.txt) Linear probing stats (step =1)stats...");
 		defaultTree.codes.stats();
+		defaultTree.generateCodeQuad();
+		System.out.println("\n\nDefault(WarAndPeace.txt) Quadratic probing stats stats...");
+		defaultTree.codesQuad.stats();
 		outputCodes();
 		outputCompressed();	
 		outputDecompressed();

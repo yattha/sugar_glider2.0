@@ -6,7 +6,7 @@ import java.util.Objects;
 
 
 public class MyHashTable <K, V> {
-	static final int LINEAR_STEP = 547;
+	static final int LINEAR_STEP = 1;
 	List<MyEntry<K, V>> data;
 	int capacity, numEnts, maxProbe;
 	int[] probeHGram;

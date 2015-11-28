@@ -8,6 +8,7 @@ public class CodingTree {
 	static final int MAP_SIZE = 32768;
 	String text;
 	MyHashTable<String, String> codes;
+	MyHashTableQuadratic<String, String> codesQuad;
 	private MyHashTable<String, Integer> frequencies;
 	byte[] bits;
 	private Node finishedTree;
@@ -17,6 +18,7 @@ public class CodingTree {
 	public CodingTree(String fullText) {
 		text = fullText;		
 		codes = new MyHashTable<String, String>(MAP_SIZE);
+		codesQuad = new MyHashTableQuadratic<String, String>(MAP_SIZE);
 		frequencies = new MyHashTable<String, Integer>(MAP_SIZE);		
 		bitString = "";
 		doStuff();
@@ -92,7 +94,7 @@ public class CodingTree {
 	private void generateCode() {
 		traverseTree(finishedTree, "");
 	}
-
+	
 	private void traverseTree(Node n, String s) {				
 		if(n.isLeaf()) {
 			codes.put(n.data.key, s);
@@ -101,6 +103,13 @@ public class CodingTree {
 		traverseTree(n.right, s = s.substring(0, s.length()-1) + "1");
 		}
 	}
+	
+	public void generateCodeQuad() {
+		for(MyEntry<String, String> m : codes.toList())codesQuad.put(m.key, m.value);
+	}
+
+	
+	
 	
 	private void encode() {
 		int len = text.length(), curPos = 0, lastSeperator = 0 ; 
