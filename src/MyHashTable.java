@@ -73,7 +73,7 @@ public class MyHashTable <K, V> {
 		result.append("Hash Table Stats\n= = = = = = = = = = = = = = = = = = = =\nNumber of Entries: ");
 		result.append(numEnts + "\nNumber of Buckets: " + capacity +"\nHistogram of Probes: ");
 		result.append(histogramToString() + "\nFill Percentage: " + (numEnts/(double)capacity)*100 + "%");
-		result.append("\nMax Linear Prob: " + maxProbe + "\nAverage Linear Prob: " + calcAvgProbe() );
+		result.append("\nMax Probe: " + maxProbe + "\nAverage Linear Prob: " + calcAvgProbe() );
 		System.out.println(result.toString()+"\n\n\n" );
 	}
 
