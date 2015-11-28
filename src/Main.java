@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 
 
 public class Main {
-	static final String DEFAULT_TXT = "./src/WarAndPeace.txt", PRIDE_TXT = "./src/PridePrej.txt", XMAS_TXT = "./src/Christmas.txt";	
+	static final String DEFAULT_TXT = "./WarAndPeace.txt", PRIDE_TXT = "./PridePrej.txt", XMAS_TXT = "./Christmas.txt";	
 	static CodingTree defaultTree, prideTree, xmasTree;
 	
 	public static void main(String[] args) {
